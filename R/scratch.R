@@ -4,6 +4,7 @@ install.packages("devtools")
 install.packages("coda")
 library(coda)
 
+
 ## Standalone function
 ## Monte Carlo sampling event handler function
 MC <- function(y, a = NULL, b = NULL, r = NULL, smc, prior, sampling, predictive = FALSE, summary = FALSE) {
