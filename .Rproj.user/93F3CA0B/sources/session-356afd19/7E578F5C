@@ -1,0 +1,26 @@
+{
+    "id": "7E578F5C",
+    "path": "~/bayesHelper/R/scratch.R",
+    "project_path": "R/scratch.R",
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1714421441563.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "22,51",
+        "scrollLine": "25"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1714421421,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1714421421,
+    "read_only": false,
+    "read_only_alternatives": []
+}
