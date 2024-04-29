@@ -8,25 +8,54 @@ library(coda)
 ## Standalone function
 ## Monte Carlo sampling event handler function
 MC <- function(y, a = NULL, b = NULL, r = NULL, smc, prior, sampling, predictive = FALSE, summary = FALSE) {
-  if (prior=="gamma" & sampling=="poisson" & predictive == FALSE){
+  if (prior=="gamma" & sampling=="poisson" & predictive == FALSE & summary == FALSE){
     return (gammaPoisPosterior(y, a, b, smc))
-  } else if (prior=="gamma" & sampling=="poisson" & predictive == TRUE){
+  } else if (prior=="gamma" & sampling=="poisson" & predictive == FALSE & summary == TRUE){
+    return(simulationSummary(gammaPoisPosterior(y, a, b, smc), type="MC"))
+  } else if (prior=="gamma" & sampling=="poisson" & predictive == TRUE & summary == FALSE){
     return (gammaPoisPredictive(y, a, b, smc))
-  } else if (prior=="beta" & sampling=="bernoulli" & predictive == FALSE){
+  } else if (prior=="gamma" & sampling=="poisson" & predictive == TRUE & summary == TRUE){
+    return (simulationSummary(gammaPoisPredictive(y, a, b, smc), type="MC"))
+  } else if (prior=="beta" & sampling=="bernoulli" & predictive == FALSE & summary == FALSE){
     return (betaBernoulliPosterior(y, a, b, smc))
-  } else if (prior=="uniform" & sampling=="bernoulli" & predictive == FALSE){
+  } else if (prior=="beta" & sampling=="bernoulli" & predictive == FALSE & summary == TRUE){
+    return (simulationSummary(betaBernoulliPosterior(y, a, b, smc), type="MC"))
+  } else if (prior=="uniform" & sampling=="bernoulli" & predictive == FALSE & summary == FALSE){
     return (uniformBernoulliPosterior(y,smc))
-  } else if (prior=="beta" & sampling=="negativebinomial" & predictive == FALSE){
+  } else if (prior=="uniform" & sampling=="bernoulli" & predictive == FALSE & summary == TRUE){
+    return (simulationSummary(uniformBernoulliPosterior(y,smc), type="MC"))
+  } else if (prior=="beta" & sampling=="negativebinomial" & predictive == FALSE & summary == FALSE){
     return (betaNegativeBinomialPosterior(y, a, b, r, smc))
-  } else if (prior=="beta" & sampling=="geometric"  & predictive == FALSE){
+  } else if (prior=="beta" & sampling=="negativebinomial" & predictive == FALSE & summary == TRUE){
+    return (simulationSummary(betaNegativeBinomialPosterior(y, a, b, r, smc), type="MC"))
+  } else if (prior=="beta" & sampling=="geometric"  & predictive == FALSE & summary == FALSE){
     return(betaGeometricPosterior(y, a, b, smc))
-  } else if (prior=="gamma" & sampling=="exponential" & predictive==FALSE){
+  } else if (prior=="beta" & sampling=="geometric"  & predictive == FALSE & summary == TRUE){
+    return(simulationSummary(betaGeometricPosterior(y, a, b, smc), type="MC"))
+  } else if (prior=="gamma" & sampling=="exponential" & predictive==FALSE & summary == FALSE){
     return(gammaExponentialPosterior(y, a, b, smc))
+  } else if (prior=="gamma" & sampling=="exponential" & predictive==FALSE & summary == TRUE){
+    return(simulationSummary(gammaExponentialPosterior(y, a, b, smc), type="MC"))
   } else{
-    return("**Chosen distribution combinations are not supported**")
+    return("ERROR: chosen distribution combinations are not supported!")
   }
 }
 
+
+simulationSummary <- function(values, type){
+  if (type=="MC"){
+    print(paste("Approximate expected value is: ", mean(values), sep=""))
+    print(paste("Approximate variance value is: ", var(values), sep=""))
+    print(paste("Monte Carlo standard error is: ", sd(values), sep=""))
+    print(hist(values, main = "Approxmate Distribution", xlab = "Value", ylab = "Frequency"))
+  } else if (type=="Gibbs") {
+    print(paste("Approximate expected value is: ", mean(values), sep=""))
+    print(paste("Approximate variance value is: ", var(values), sep=""))
+    print(hist(x, main = "Approxmate Distribution", xlab = "Value", ylab = "Frequency"))
+    print(paste("Autocorrelation is: ", acf(values), sep=""))
+    print(paste("Effectivs sample size is: ", effectiveSize(values), sep=""))
+  }
+}
 
 ## Normal prior on mean & Normal sampling distribution with variance known, mean posterior outputs
 univariateNormMC_varKnown <- function(y, mu, tau, sigma, smc, output = NULL, summary = FALSE){
@@ -132,20 +161,6 @@ mvn_Gibbs <- function(y, mu0, Lambda0, v0, S0, smc, output=NULL, summary = FALSE
   }
 }
 
-simulationSummary <- function(values, type){
-  if (type=="MC"){
-    print(paste("Approximate expected value is: ", mean(x), sep=""))
-    print(paste("Approximate variance value is: ", var(x), sep=""))
-    print(paste("Monte Carlo standard error is: ", sd(x), sep=""))
-    print(hist(x, main = "Approxmate Distribution", xlab = "Value", ylab = "Density"))
-  } else if (type=="Gibbs") {
-    print(paste("Approximate expected value is: ", mean(x), sep=""))
-    print(paste("Approximate variance value is: ", var(x), sep=""))
-    print(hist(x, main = "Approxmate Distribution", xlab = "Value", ylab = "Density"))
-    print(paste("Autocorrelation is: ", acf(x), sep=""))
-    print(paste("Effectivs sample size is: ", effectiveSize(x), sep=""))
-  }
-}
 
 ## The below functions are helper functions ------------------------------------
 
@@ -182,7 +197,7 @@ betaNegativeBinomialPosterior <- function(y, a, b, r, smc){
 
 ## Beta prior & Gemeotric sampling distribution with posterior outputs
 betaGeometricPosterior <- function(y, a, b, smc){
-  ret <- rbeta(smc, a + n, b + sum(y))
+  ret <- rbeta(smc, a + length(y), b + sum(y))
   return (ret)
 }
 
