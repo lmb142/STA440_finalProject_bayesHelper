@@ -1,18 +1,21 @@
-\name{uniformBernoulliPosterior}
-\alias{uniformBernoulliPosterior}
+\name{betaBinomialPredictive}
+\alias{betaBinomialPredictive}
 %- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-Monte Carlo Posterior Estimates for a Uniform Prior and Bernoulli Sampling Distribution
+Monte Carlo Posterior Predictive Estimates for a Beta Prior and Binomial Sampling Distribution
 }
 \description{
-This function generates posterior estimates for the probability of success, when the prior distribution is Uniform and the sampling distribution is Bernoulli.
+This function generates posterior predictive estimates for the number of successes, when the prior distribution is Beta and the sampling distribution is Binomial.
 }
 \usage{
-uniformBernoulliPosterior(y, smc)
+betaBinomialPredictive(y, a, b, m, smc)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{y}{data numerical vector}
+  \item{a}{a numerical parameter for the beta prior distribution (alpha parameter)}
+  \item{b}{a numerical parameter for the beta prior distribution (beta parameter)}
+  \item{m}{the number of trials}
   \item{smc}{Monte Carlo simulation size (an integer)}
 }
 \details{
@@ -37,14 +40,14 @@ Lucas Bulczynski
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-uniformBernoulliPosterior(c(0.1,0.4,0.6,0.3,0.8), 1e5)
+betaBinomialPredictive(c(0.1,0.4,0.6,0.3,0.8), 1, 5, 4, 1e5)
 
 ## The function is currently defined as
-function (y, smc)
-{
-    ret <- rbeta(smc, sum(y), length(y) - sum(y))
-    return(ret)
-  }
+function (y, a, b, m, smc) {
+  theta <- rbeta(smc, a + sum(y), b + m*length(y) - sum(y))
+  ret <- rbinom(smc, m, theta)
+  return (ret)
+}
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory (show via RShowDoc("KEYWORDS")):
