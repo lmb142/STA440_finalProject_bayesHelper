@@ -5,10 +5,10 @@
 Markov Chain Monte Carlo Estimates for a Univariate Normal Model with Unknown Mean and Variance
 }
 \description{
-This function can output either posterior estimates for the mean parameter or variance parameter. This function assumes that the prior on the sampling variance is an Inverse Gamma, the prior on the mean parameter is a Normal prior, and the sampling distribution is a univariate Normal distribution. Note, here we sample from the full conditional posterior distributions, and the prior distributions on the mean and variance are independent.
+This function can output either posterior estimates for the mean parameter, variance parameter or posterior predictive estimates. This function assumes that the prior on the sampling variance is an Inverse Gamma, the prior on the mean parameter is a Normal prior, and the sampling distribution is a univariate Normal distribution. Note, here we sample from the full conditional posterior distributions, and the prior distributions on the mean and variance are independent.
 }
 \usage{
-univariateNorm_Gibbs(y, v0, sigma0, mu0, tau0, smc, output=NULL, summary = FALSE)
+univariateNorm_Gibbs(y, v0, sigma0, mu0, tau0, smc, output, summary = FALSE)
 
 }
 %- maybe also 'usage' for other objects documented here.
@@ -19,7 +19,7 @@ univariateNorm_Gibbs(y, v0, sigma0, mu0, tau0, smc, output=NULL, summary = FALSE
  \item{mu0}{the mean parameter for the prior distribution on the mean of the sampling distribution (a numerical value)}
  \item{tau0}{the standard deviation parameter for the prior distribution on the mean parameter of the sampling distribution (a numerical value)}
   \item{smc}{Markov Chain Monte Carlo simulation size (an integer)}
-  \item{output}{an optional parameter to specify whether the posterior mean, posterior variance or posterior predictive estimates will be the output. By default the posterior mean and variance estimates are printed in a two-column matrix, with the posterior mean estimates being printed in the first column (a string)}
+  \item{output}{a parameter to specify whether the posterior mean, posterior variance or posterior predictive estimates will be the output (a string)}
   \item{summary}{an optional parameter indicating if summary output is desired (a boolean)}
 
 }
@@ -46,13 +46,13 @@ Lucas Bulczynski
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
-univariateNorm_Gibbs(c(-1,-3,5,8,2,12,-5,7,6,9,3,2), 1, 2, 4, 1, 1e4, output="mean", summary=FALSE)
-univariateNorm_Gibbs(c(-1,-3,5,8,2,12,-5,7,6,9,3,2), 1, 2, 4, 1, 1e4, output="variance", summary=FALSE)
-univariateNorm_Gibbs(c(-1,-3,5,8,2,12,-5,7,6,9,3,2), 1, 2, 4, 1, 1e4, output="mean", summary=TRUE)
-univariateNorm_Gibbs(c(-1,-3,5,8,2,12,-5,7,6,9,3,2), 1, 2, 4, 1, 1e4, output="predictive", summary=TRUE)
+univariateNorm_Gibbs(c(-1,-3,5,8,2,12,-5,7,6,9,3,2), 1, 2, 4, 1, 500, output="mean", summary=FALSE)
+univariateNorm_Gibbs(c(-1,-3,5,8,2,12,-5,7,6,9,3,2), 1, 2, 4, 1, 500, output="variance", summary=FALSE)
+univariateNorm_Gibbs(c(-1,-3,5,8,2,12,-5,7,6,9,3,2), 1, 2, 4, 1, 500, output="mean", summary=TRUE)
+univariateNorm_Gibbs(c(-1,-3,5,8,2,12,-5,7,6,9,3,2), 1, 2, 4, 1, 500, output="predictive", summary=TRUE)
 
 ## The function is currently defined as
-function (y, v0, sigma0, mu0, tau0, smc, output=NULL, summary = FALSE){
+function (y, v0, sigma0, mu0, tau0, smc, output, summary = FALSE){
   vn <- v0 + length(y)
   theta_0 <- mean(y)
   var_0 <-  var(y)
@@ -80,8 +80,6 @@ function (y, v0, sigma0, mu0, tau0, smc, output=NULL, summary = FALSE){
     return (simulationSummary(PHI[,2], "Gibbs"))
   } else if (output=="predictive" & summary==TRUE){
     return (simulationSummary(PRED, "Gibbs"))
-  } else{
-    return (PHI)
   }
 }
 }

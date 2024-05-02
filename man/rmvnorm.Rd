@@ -5,38 +5,34 @@
 Multivariate Normal Distribution Function
 }
 \description{
-A function taken directly from Peter Hoff's textbook (cited below), which takes specified model parameters and generates random samples from a Normal distribution.
+A function taken directly from Peter Hoff's textbook (cited below), which takes the specified model parameters and generates random samples from a Normal distribution.
 }
 \usage{
 rmvnorm(n, mu, Sigma)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
-  \item{n}{
+  \item{n}{Markov Chain Monte Carlo simulation size (an integer)
 %%     ~~Describe \code{n} here~~
 }
-  \item{mu}{
+  \item{mu}{the mean vector parameter (a numerical 1 x p vector)
 %%     ~~Describe \code{mu} here~~
 }
-  \item{Sigma}{
+  \item{Sigma}{the covariance matrix parameter (a numerical p x p matrix)
 %%     ~~Describe \code{Sigma} here~~
 }
 }
 \details{
-%%  ~~ If necessary, more details than the description above ~~
+
 }
 \value{
-%%  ~Describe the value returned
-%%  If it is a LIST, use
-%%  \item{comp1 }{Description of 'comp1'}
-%%  \item{comp2 }{Description of 'comp2'}
-%% ...
+A numerical vector of the generated Markov Chain Monte Carlo vector estimates
 }
 \references{
 Hoff, P. D. (2009). A first course in Bayesian statistical methods. Springer. https://doi.org/10.1007/978-0-387-92407-6.
 }
 \author{
-%%  ~~who you are~~
+Peter Hoff
 }
 \note{
 %%  ~~further notes~~
@@ -48,6 +44,7 @@ Hoff, P. D. (2009). A first course in Bayesian statistical methods. Springer. ht
 %% ~~objects to See Also as \code{\link{help}}, ~~~
 }
 \examples{
+rmvnorm(1e5, c(50, 50), matrix(c(625, 312.5, 312.5, 625), nrow=2, ncol=2))
 
 ## The function is currently defined as
 function (n, mu, Sigma)

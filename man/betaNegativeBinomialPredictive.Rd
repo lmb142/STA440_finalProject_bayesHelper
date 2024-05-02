@@ -15,7 +15,7 @@ betaNegativeBinomialPredictive(y, a, b, r, smc)
   \item{y}{data numerical vector}
   \item{a}{a numerical parameter for the beta prior distribution (alpha parameter)}
   \item{b}{a numerical parameter for the beta prior distribution (beta parameter)}
-  \item{r}{stopping-time numerical parameter for a negative binomial distribution}
+  \item{r}{failure number numerical parameter for a negative binomial distribution}
   \item{smc}{Monte Carlo simulation size (an integer)}
 }
 \details{

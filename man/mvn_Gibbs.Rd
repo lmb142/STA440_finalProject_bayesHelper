@@ -8,7 +8,7 @@ Markov Chain Monte Carlo Estimates for a Multivariate Normal Model with Unknown 
 This function can output either posterior estimates for the mean vector parameter (1 x p) or covariance matrix (p x p), or posterior predictive estimates for the data vector (1 x p). This function assumes that the prior on the sampling covariance matrix is a Wishart distribution, the prior on the mean vector is a multivariate Normal prior, and the sampling distribution is a multivariate Normal distribution. Note, here we sample from the full conditional posterior distributions, and the prior distributions on the mean and variance are independent.
 }
 \usage{
-mvn_Gibbs(y, mu0, Lambda0, v0, S0, smc, output = NULL, summary = FALSE)
+mvn_Gibbs(y, mu0, Lambda0, v0, S0, smc, output, summary = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,7 +22,7 @@ mvn_Gibbs(y, mu0, Lambda0, v0, S0, smc, output = NULL, summary = FALSE)
 %%     ~~Describe \code{S0} here~~
 }
   \item{smc}{Markov Chain Monte Carlo simulation size (an integer)}
-  \item{output}{an optional parameter to specify whether the posterior mean vector, posterior covariance matrix, or predictive posterior vector estimates will be the output. By default both are printed in a list, with the posterior mean vector estimates being printed in first (a string)}
+  \item{output}{an optional parameter to specify whether the posterior mean vector, posterior covariance matrix, or predictive posterior vector estimates will be the output (a string)}
   \item{summary}{an optional parameter indicating if summary output is desired (a boolean)}
 }
 \details{
@@ -49,22 +49,22 @@ This function uses logic from Peter Hoff's textbook cited below. Furthermore, th
 \examples{
 mvn_Gibbs(matrix(c(59, 43, 34, 32, 42, 38, 55, 67, 64, 45, 49, 72, 34,
 70, 34, 50, 41, 52, 60, 34, 28, 35, 77, 39, 46, 26, 38, 43, 68,
-86, 77, 60, 50, 59, 38, 48, 55, 58, 54, 60, 75, 47, 48, 33), ncol=2, nrow=22), c(50, 50), matrix(c(625, 312.5, 312,5, 625), nrow=2, ncol=2), 4, matrix(c(625, 312.5, 312,5, 625), nrow=2, ncol=2)
+86, 77, 60, 50, 59, 38, 48, 55, 58, 54, 60, 75, 47, 48, 33), ncol=2, nrow=22), c(50, 50), matrix(c(625, 312.5, 312.5, 625), nrow=2, ncol=2), 4, matrix(c(625, 312.5, 312.5, 625), nrow=2, ncol=2)
 , 500, output= "mean", summary=FALSE)
 
 mvn_Gibbs(matrix(c(59, 43, 34, 32, 42, 38, 55, 67, 64, 45, 49, 72, 34,
 70, 34, 50, 41, 52, 60, 34, 28, 35, 77, 39, 46, 26, 38, 43, 68,
-86, 77, 60, 50, 59, 38, 48, 55, 58, 54, 60, 75, 47, 48, 33), ncol=2, nrow=22), c(50, 50), matrix(c(625, 312.5, 312,5, 625), nrow=2, ncol=2), 4, matrix(c(625, 312.5, 312,5, 625), nrow=2, ncol=2)
+86, 77, 60, 50, 59, 38, 48, 55, 58, 54, 60, 75, 47, 48, 33), ncol=2, nrow=22), c(50, 50), matrix(c(625, 312.5, 312.5, 625), nrow=2, ncol=2), 4, matrix(c(625, 312.5, 312.5, 625), nrow=2, ncol=2)
 , 500, output= "covariance", summary=FALSE)
 
 mvn_Gibbs(matrix(c(59, 43, 34, 32, 42, 38, 55, 67, 64, 45, 49, 72, 34,
 70, 34, 50, 41, 52, 60, 34, 28, 35, 77, 39, 46, 26, 38, 43, 68,
-86, 77, 60, 50, 59, 38, 48, 55, 58, 54, 60, 75, 47, 48, 33), ncol=2, nrow=22), c(50, 50), matrix(c(625, 312.5, 312,5, 625), nrow=2, ncol=2), 4, matrix(c(625, 312.5, 312,5, 625), nrow=2, ncol=2)
+86, 77, 60, 50, 59, 38, 48, 55, 58, 54, 60, 75, 47, 48, 33), ncol=2, nrow=22), c(50, 50), matrix(c(625, 312.5, 312.5, 625), nrow=2, ncol=2), 4, matrix(c(625, 312.5, 312.5, 625), nrow=2, ncol=2)
 , 500, output= "mean", summary=TRUE)
 
 
 ## The function is currently defined as
-function (y, mu0, Lambda0, v0, S0, smc, output=NULL, summary = FALSE) {
+function (y, mu0, Lambda0, v0, S0, smc, output, summary = FALSE) {
   n <- dim(y)[1]
   ybar <- apply(y, 2, mean)
   Sigma <- cov(y)
@@ -92,8 +92,6 @@ function (y, mu0, Lambda0, v0, S0, smc, output=NULL, summary = FALSE) {
     return ("ERROR: summary statistics not supported for covariance matrix")
   } else if (output=="predictive" & summary==TRUE){
     return (simulationSummary(PRED, "GibbsMvn"))
-  } else{
-    return (THETA)
   }
 }
 }

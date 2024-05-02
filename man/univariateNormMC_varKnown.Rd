@@ -8,7 +8,7 @@ Monte Carlo Estimates for a Univariate Normal Model with Unknown Mean and Known 
 This function can output either posterior estimates for the mean parameter, or posterior predictive estimates for the data. This function assumes that the sampling variance is known, the prior on the mean parameter is a Normal prior conditioned on the sampling distribution's variance, and the sampling distribution is a univariate Normal distribution.
 }
 \usage{
-univariateNormMC_varKnown(y, mu0, tau0, sigma, smc, output = NULL, summary = FALSE)
+univariateNormMC_varKnown(y, mu0, tau0, sigma, smc, output, summary = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -22,7 +22,7 @@ univariateNormMC_varKnown(y, mu0, tau0, sigma, smc, output = NULL, summary = FAL
 }
   \item{smc}{Monte Carlo simulation size (an integer)}
 %%     ~~Describe \code{smc} here~~
-  \item{output}{an optional parameter to specify whether the posterior mean or posterior predictive estimates will be the output. By default both are printed, with the posterior mean estimates being printed before the later (a string)
+  \item{output}{a parameter to specify whether the posterior mean or posterior predictive estimates will be the output (a string)
 %%     ~~Describe \code{output} here~~
 }
   \item{summary}{an optional parameter indicating if summary output is desired (a boolean)}
@@ -59,7 +59,7 @@ univariateNormMC_varKnown(c(-1,-3,5,8,2,12,-5,7,6,9,3,2), 3, 2, 5, 1e5, output =
 "mean", summary = TRUE)
 
 ## The function is currently defined as
-function (y, mu0, tau0, sigma, smc, output = NULL, summary = FALSE){
+function (y, mu0, tau0, sigma, smc, output, summary = FALSE){
   varianceValue = 1 / (1/tau0^2 + length(y) / sigma^2)
   meanValue = (mu0 /tau0^2 + sum(y) / sigma^2) * varianceValue
   thetaValue <- rnorm(smc, meanValue, sqrt(varianceValue))
@@ -72,9 +72,8 @@ function (y, mu0, tau0, sigma, smc, output = NULL, summary = FALSE){
     return(simulationSummary(thetaValue, "MC"))
   } else if (output=="predictive" & summary == TRUE){
     return(simulationSummary(predValue, "MC"))
-  } else{
-    return(list(thetaValue, predValue))
   }
+}
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory (show via RShowDoc("KEYWORDS")):

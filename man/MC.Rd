@@ -5,33 +5,33 @@
 Monte Carlo Simulation Generator
 }
 \description{
-This function generates a Monte Carlo approximation for the posterior distribution with the specified prior and sampling distribution, parameters and sample size.
+This function generates a Monte Carlo simulation for the posterior or posterior predictive distribution with the specified prior and sampling distribution, parameters and sample size.
 }
 \usage{
-MC(y, a = NULL, b = NULL, r = NULL, m = NULL, smc, prior, sampling, predictive = FALSE, summary = FALSE)
+MC(y, a, b, r = NULL, m = NULL, smc, prior, sampling, predictive = FALSE, summary = FALSE)
 }
 
 \arguments{
   \item{y}{data numerical vector}
-  \item{a}{an optional numerical parameter for certain prior distributions}
-  \item{b}{an optional numerical parameter for certain prior distributions}
+  \item{a}{a numerical parameter for certain prior distributions (alpha)}
+  \item{b}{a numerical parameter for certain prior distributions (beta)}
   \item{r}{stopping-time numerical parameter for a negative binomial distribution}
   \item{m}{the number of trials}
   \item{smc}{Monte Carlo simulation size (an integer)}
   \item{prior}{prior distribution (a string)}
   \item{sampling}{sampling distribution (a string)}
-  \item{predictive}{an optional parameter indicating if the posterior predictive output is desired (a boolean)}
-  \item{summary}{an optional parameter indicating if summary output is desired for a given simulation (a boolean)}
+  \item{predictive}{an optional parameter indicating if the posterior predictive output is desired (a boolean). By default, the value is set to false}
+  \item{summary}{an optional parameter indicating if summary output is desired for a given simulation (a boolean). By default, the value is set to false}
 }
 \details{
 This function calls a series of helper functions, based on which prior and sampling distributions are passed to the function, among other parameters. See in the function definition below what these helper functions are named, and access the associated help files to learn more about each one.
 
 The supported prior and sampling distribution pairs for posterior output are: Gamma prior and Poisson sampling, Beta prior and Bernoulli sampling, Beta prior and Binomial sampling, Beta prior and Negative Binomial sampling, Beta prior and Geometric sampling and Gamma prior and Exponential sampling.
 
-The supported prior and sampling distribution pairs for posterior predictive output are: Gamma prior and Poisson sampling, Beta prior and Bernoulli sampling, Beta prior and Binomial sampling and Beta prior and Negative Binomial samplinG.
+The supported prior and sampling distribution pairs for posterior predictive output are: Gamma prior and Poisson sampling, Beta prior and Bernoulli sampling, Beta prior and Binomial sampling and Beta prior and Negative Binomial sampling.
 }
 \value{
-A numerical vector of the generated Monte Carlo values, or a series of summary statistics (numerical quantities embedded in strings) and a histogram based off the documentation of the simulationSummary() function.
+A numerical vector of the generated Monte Carlo values, or a series of summary statistics (numerical quantities embedded in strings) and a histogram generated in the simulationSummary() helper function.
 }
 \references{
 %% ~put references to the literature/web site here ~
@@ -55,7 +55,7 @@ MC(c(0.1,0.3,0.5, 0.7, 0.4, 0.9), a = 2, b = 6, r = 3, smc = 1e5, prior = "beta"
 MC(c(0.1,0.3,0.5, 0.7, 0.4, 0.9), a = 2, b = 6, smc = 1e5, prior = "gamma", sampling = "exponential", summary=TRUE, predictive=FALSE)
 
 ## The function is currently defined as
-function (y, a = NULL, b = NULL, r = NULL, m = NULL, smc, prior, sampling, predictive = FALSE, summary = FALSE) {
+function (y, a, b, r = NULL, m = NULL, smc, prior, sampling, predictive = FALSE, summary = FALSE) {
   if (prior=="gamma" & sampling=="poisson" & predictive == FALSE & summary == FALSE){
     return (gammaPoisPosterior(y, a, b, smc))
   } else if (prior=="gamma" & sampling=="poisson" & predictive == FALSE & summary == TRUE){
@@ -100,8 +100,6 @@ function (y, a = NULL, b = NULL, r = NULL, m = NULL, smc, prior, sampling, predi
     return("ERROR: chosen distribution combinations are not supported!")
   }
 }
-
-
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory (show via RShowDoc("KEYWORDS")):

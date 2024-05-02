@@ -1,13 +1,14 @@
 ## metadata
-#rm(list = ls())
+rm(list = ls())
 install.packages("devtools")
 install.packages("coda")
+library(devtools)
 library(coda)
 
 
 ## Standalone function
 ## Monte Carlo sampling event handler function
-MC <- function(y, a = NULL, b = NULL, r = NULL, m = NULL, smc, prior, sampling, predictive = FALSE, summary = FALSE) {
+MC <- function(y, a, b, r = NULL, m = NULL, smc, prior, sampling, predictive = FALSE, summary = FALSE) {
   if (prior=="gamma" & sampling=="poisson" & predictive == FALSE & summary == FALSE){
     return (gammaPoisPosterior(y, a, b, smc))
   } else if (prior=="gamma" & sampling=="poisson" & predictive == FALSE & summary == TRUE){
@@ -84,7 +85,7 @@ simulationSummary <- function(values, type){
 
 
 ## Normal prior on mean & Normal sampling distribution with variance known, mean posterior outputs
-univariateNormMC_varKnown <- function(y, mu0, tau0, sigma, smc, output = NULL, summary = FALSE){
+univariateNormMC_varKnown <- function(y, mu0, tau0, sigma, smc, output, summary = FALSE){
   varianceValue = 1 / (1/tau0^2 + length(y) / sigma^2)
   meanValue = (mu0 /tau0^2 + sum(y) / sigma^2) * varianceValue
   thetaValue <- rnorm(smc, meanValue, sqrt(varianceValue))
@@ -97,8 +98,6 @@ univariateNormMC_varKnown <- function(y, mu0, tau0, sigma, smc, output = NULL, s
     return(simulationSummary(thetaValue, "MC"))
   } else if (output=="predictive" & summary == TRUE){
     return(simulationSummary(predValue, "MC"))
-  } else{
-    return(list(thetaValue, predValue))
   }
 }
 
@@ -106,7 +105,7 @@ univariateNormMC_varKnown <- function(y, mu0, tau0, sigma, smc, output = NULL, s
 ## Standalone function
 ## Normal prior on mean, Normal sampling distribution & inverse gamma prior on variance
 ## posterior outputs for mean & variance
-univariateNormMC_varUnknown <- function(y, v0, sigma0, mu0, kappa0, smc, output = NULL, summary = FALSE){
+univariateNormMC_varUnknown <- function(y, v0, sigma0, mu0, kappa0, smc, output, summary = FALSE){
   n <- length(y)
   vn <- v0 + n
   sigman_squared <- 0.5 * ((length(y) - 1)*var(y) + v0*sigma0^2 + (n*kappa0)/(n + kappa0)*(mean(y)-mu0)^2)
@@ -120,14 +119,12 @@ univariateNormMC_varUnknown <- function(y, v0, sigma0, mu0, kappa0, smc, output 
     return(simulationSummary(thetaValue, "MC"))
   } else if (output=="variance" & summary == TRUE){
     return(simulationSummary(sigmaValue, "MC"))
-  } else{
-    return(list(thetaValue, sigmaValue))
   }
 }
 
 ## Standalone Function
 ## Gibbs sampler for Mean and Variance of Univariate Normal Distribution
-univariateNorm_Gibbs <- function(y, v0, sigma0, mu0, tau0, smc, output=NULL, summary = FALSE){
+univariateNorm_Gibbs <- function(y, v0, sigma0, mu0, tau0, smc, output, summary = FALSE){
   vn <- v0 + length(y)
   theta_0 <- mean(y)
   var_0 <-  var(y)
@@ -155,8 +152,6 @@ univariateNorm_Gibbs <- function(y, v0, sigma0, mu0, tau0, smc, output=NULL, sum
     return (simulationSummary(PHI[,2], "Gibbs"))
   } else if (output=="predictive" & summary==TRUE){
     return (simulationSummary(PRED, "Gibbs"))
-  } else{
-    return (PHI)
   }
 }
 
@@ -166,7 +161,7 @@ univariateNorm_Gibbs <- function(y, v0, sigma0, mu0, tau0, smc, output=NULL, sum
 ## Standalone Function
 ## Note: this function uses logic from Peter Hoff's textbook: "A First Course in Bayesian
 ## Statistical Methods"
-mvn_Gibbs <- function(y, mu0, Lambda0, v0, S0, smc, output=NULL, summary = FALSE) {
+mvn_Gibbs <- function(y, mu0, Lambda0, v0, S0, smc, output, summary = FALSE) {
   n <- dim(y)[1]
   ybar <- apply(y, 2, mean)
   Sigma <- cov(y)
@@ -194,8 +189,6 @@ mvn_Gibbs <- function(y, mu0, Lambda0, v0, S0, smc, output=NULL, summary = FALSE
     return ("ERROR: summary statistics not supported for covariance matrix")
   } else if (output=="predictive" & summary==TRUE){
     return (simulationSummary(PRED, "GibbsMvn"))
-  } else{
-    return (THETA)
   }
 }
 

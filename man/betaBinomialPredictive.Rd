@@ -5,7 +5,7 @@
 Monte Carlo Posterior Predictive Estimates for a Beta Prior and Binomial Sampling Distribution
 }
 \description{
-This function generates posterior predictive estimates for the number of successes, when the prior distribution is Beta and the sampling distribution is Binomial.
+This function generates posterior predictive estimates for the data, when the prior distribution is Beta and the sampling distribution is Binomial.
 }
 \usage{
 betaBinomialPredictive(y, a, b, m, smc)

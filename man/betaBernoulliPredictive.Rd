@@ -44,7 +44,7 @@ betaBernoulliPredictive(c(0.1,0.4,0.6,0.3,0.8), 1, 5, 1e5)
 ## The function is currently defined as
 function (y, a, b, smc) {
   theta <- rbeta(smc, a + sum(y), b + length(y) - sum(y))
-  ret <- rbinom(smc, length(y), theta)
+  ret <- rbinom(smc, 1, theta)
   return (ret)
   }
 }

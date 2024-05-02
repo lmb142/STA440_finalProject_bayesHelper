@@ -5,7 +5,7 @@
 Simulation Summary Statistics
 }
 \description{
-This function takes a vector of values generated from a simulation and displays certain statistics / model diagnostics, and based on whether the set comes from a univariate Monte Carlo, univariate Markov Chain Monte Carlo simulations or multivariate Markov Chain Monte Carlo simulation. Note, this function can be called directly from the Monte Carlo and Markov Chain Monte Carlo simulation functions, via the optional "summary" parameter.
+This function takes a vector of values generated from a simulation and displays certain statistics / model diagnostics, based on whether the simulation comes from a univariate Monte Carlo, univariate Markov Chain Monte Carlo, or multivariate Markov Chain Monte Carlo simulation. Note, this function can be called directly from the Monte Carlo and Markov Chain Monte Carlo simulation functions, via the optional "summary" parameter.
 }
 \usage{
 simulationSummary(values, type)
@@ -41,7 +41,7 @@ Lucas Bulczynski
 }
 \examples{
 simulationSummary(c(5,4,5,6,7,3,5,6,6,3,6,7,8,4,5,6,2,4), "MC")
-
+simulationSummary(c(5,4,5,6,7,3,5,6,6,3,6,7,8,4,5,6,2,4), "Gibbs")
 ## The function is currently defined as
 function (values, type) {
     if (type == "MC") {

@@ -8,7 +8,7 @@ Monte Carlo Estimates for a Univariate Normal Model with Unknown Mean and Varian
 This function can output either posterior estimates for the mean parameter or variance parameter. This function assumes that the prior on the sampling variance is an Inverse Gamma, the prior on the mean parameter is a Normal prior conditioned on the variance parameter, and the sampling distribution is a univariate Normal distribution.
 }
 \usage{
-univariateNormMC_varUnknown(y, v0, sigma0, mu0, kappa0, smc, output = NULL, summary = FALSE)
+univariateNormMC_varUnknown(y, v0, sigma0, mu0, kappa0, smc, output, summary = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -24,7 +24,7 @@ univariateNormMC_varUnknown(y, v0, sigma0, mu0, kappa0, smc, output = NULL, summ
 %%     ~~Describe \code{kappa0} here~~
 }
   \item{smc}{Monte Carlo simulation size (an integer)}
-  \item{output}{an optional parameter to specify whether the posterior mean or posterior variance estimates will be the output. By default both are printed, with the posterior mean estimates being printed before the later (a string)
+  \item{output}{a parameter to specify whether the posterior mean or posterior variance estimates will be the output (a string)
 %%     ~~Describe \code{output} here~~
 }
   \item{summary}{an optional parameter indicating if summary output is desired (a boolean)}
@@ -59,7 +59,7 @@ univariateNormMC_varUnknown(c(-1,-3,5,8,2,12,-5,7,6,9,3,2), 1, 2, 4, 1, 1e5, out
 univariateNormMC_varUnknown(c(-1,-3,5,8,2,12,-5,7,6,9,3,2), 1, 2, 4, 1, 1e5, output="variance", summary=TRUE)
 
 ## The function is currently defined as
-function (y, v0, sigma0, mu0, kappa0, smc, output = NULL, summary = FALSE){
+function (y, v0, sigma0, mu0, kappa0, smc, output, summary = FALSE){
   n <- length(y)
   vn <- v0 + n
   sigman_squared <- 0.5 * ((length(y) - 1)*var(y) + v0*sigma0^2 + (n*kappa0)/(n + kappa0)*(mean(y)-mu0)^2)
@@ -73,8 +73,6 @@ function (y, v0, sigma0, mu0, kappa0, smc, output = NULL, summary = FALSE){
     return(simulationSummary(thetaValue, "MC"))
   } else if (output=="variance" & summary == TRUE){
     return(simulationSummary(predValue, "MC"))
-  } else{
-    return(list(thetaValue, sigmaValue))
   }
 }
 }
