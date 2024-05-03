@@ -5,7 +5,6 @@ install.packages("coda")
 library(devtools)
 library(coda)
 
-
 ## Standalone function
 ## Monte Carlo sampling event handler function
 MC <- function(y, a, b, r = NULL, m = NULL, smc, prior, sampling, predictive = FALSE, summary = FALSE) {
@@ -60,7 +59,6 @@ MC <- function(y, a, b, r = NULL, m = NULL, smc, prior, sampling, predictive = F
   }
 }
 
-
 simulationSummary <- function(values, type){
   if (type=="MC"){
     print(paste("Approximate expected value is: ", mean(values), sep=""))
@@ -82,8 +80,6 @@ simulationSummary <- function(values, type){
   }
 }
 
-
-
 ## Normal prior on mean & Normal sampling distribution with variance known, mean posterior outputs
 univariateNormMC_varKnown <- function(y, mu0, tau0, sigma, smc, output, summary = FALSE){
   varianceValue = 1 / (1/tau0^2 + length(y) / sigma^2)
@@ -100,7 +96,6 @@ univariateNormMC_varKnown <- function(y, mu0, tau0, sigma, smc, output, summary 
     return(simulationSummary(predValue, "MC"))
   }
 }
-
 
 ## Standalone function
 ## Normal prior on mean, Normal sampling distribution & inverse gamma prior on variance
@@ -155,9 +150,6 @@ univariateNorm_Gibbs <- function(y, v0, sigma0, mu0, tau0, smc, output, summary 
   }
 }
 
-
-
-
 ## Standalone Function
 ## Note: this function uses logic from Peter Hoff's textbook: "A First Course in Bayesian
 ## Statistical Methods"
@@ -191,7 +183,6 @@ mvn_Gibbs <- function(y, mu0, Lambda0, v0, S0, smc, output, summary = FALSE) {
     return (simulationSummary(PRED, "GibbsMvn"))
   }
 }
-
 
 ## The below functions are helper functions ------------------------------------
 
@@ -285,4 +276,3 @@ rmvnorm<-
     }
     res
   }
-

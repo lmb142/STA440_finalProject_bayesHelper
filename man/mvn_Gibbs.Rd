@@ -5,7 +5,7 @@
 Markov Chain Monte Carlo Estimates for a Multivariate Normal Model with Unknown Mean and Variance
 }
 \description{
-This function can output either posterior estimates for the mean vector parameter (1 x p) or covariance matrix (p x p), or posterior predictive estimates for the data vector (1 x p). This function assumes that the prior on the sampling covariance matrix is a Wishart distribution, the prior on the mean vector is a multivariate Normal prior, and the sampling distribution is a multivariate Normal distribution. Note, here we sample from the full conditional posterior distributions, and the prior distributions on the mean and variance are independent.
+This function can output either posterior estimates for the mean vector parameter (1 x p), covariance matrix (p x p), or posterior predictive estimates for the data vector (1 x p). This function assumes that the prior on the sampling covariance matrix is a Wishart distribution, the prior on the mean vector is a multivariate Normal prior, and the sampling distribution is a multivariate Normal distribution. Note, here we sample from the full conditional posterior distributions, and the prior distributions on the mean and variance are independent.
 }
 \usage{
 mvn_Gibbs(y, mu0, Lambda0, v0, S0, smc, output, summary = FALSE)
